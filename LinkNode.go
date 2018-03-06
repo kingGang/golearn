@@ -5,11 +5,13 @@ import (
 	"strconv"
 )
 
+//节点
 type Node struct {
 	data  string
 	pNext *Node
 }
 
+//指向节点的指针
 type LinkList *Node
 
 func InitList() (l LinkList) {
@@ -18,6 +20,7 @@ func InitList() (l LinkList) {
 	return l
 }
 
+//创建一个指向
 func CreateListHead(l LinkList, n int) int {
 	for i := 0; i < n; i++ {
 		p := Node{}
@@ -88,7 +91,7 @@ func GetElem(l LinkList, i int) (n *Node, err int) {
 
 }
 func InsertList(l LinkList, i int, data string) {
-	p := l.pNext
+	p := l
 	if p == nil {
 		fmt.Println("链表为空，默认插入第一个节点")
 		insNode := Node{}
@@ -96,7 +99,7 @@ func InsertList(l LinkList, i int, data string) {
 		insNode.pNext = nil
 		l.pNext = &insNode
 	}
-	j := 1
+	j := 0
 	for p != nil && j < i {
 		j++
 		p = p.pNext
@@ -110,13 +113,58 @@ func InsertList(l LinkList, i int, data string) {
 	insNode.pNext = p.pNext
 	p.pNext = &insNode
 }
+func InsertListTail(l LinkList, data string) {
+	p := l
+	for p.pNext != nil {
+		p = p.pNext
+	}
+	insNode := Node{}
+	insNode.data = data
+	insNode.pNext = nil
+	p.pNext = &insNode
+
+}
+func DelList(l LinkList, i int) int {
+	p := l
+	if p.pNext == nil {
+		fmt.Println("链表为空，无法删除")
+		return 0
+	}
+	var j int = 0
+	for p.pNext != nil && j < i-1 {
+		j++
+		p = p.pNext
+	}
+	if p.pNext == nil {
+		fmt.Println("你要删除的节点，超过链表长度\n")
+	}
+	p.pNext = p.pNext.pNext
+	return 1
+}
+func ClearList(linklist LinkList) int {
+	linklist.pNext = nil
+	// pre := linkli
+	// for pre != nil {
+	// 	temp = pre
+	// 	pre = pre.pNext
+	// 	// free(temp)
+	// }
+	// linklist.pNext = nil
+	return 1
+}
 
 func main() {
 	linkList := InitList()
+	fmt.Printf("%+v\n", linkList)
 	CreateListTail(linkList, 10)
+	fmt.Printf("插入后：%+v\n", linkList)
 	//PrintLinkList(linkList);
 	//fmt.Println(GetElem(linkList,9))
-	InsertList(linkList, 0, "你好")
+	InsertListTail(linkList, "你好")
 	PrintLinkList(linkList)
-	//fmt.Printf("\nlinkList=%+v,长度=%d\r\n", linkList, GetLength(linkList))
+	DelList(linkList, 10)
+	PrintLinkList(linkList)
+	ClearList(linkList)
+	PrintLinkList(linkList)
+	fmt.Printf("\nlinkList=%+v,长度=%d\r\n", linkList, GetLength(linkList))
 }
