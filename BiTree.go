@@ -1,8 +1,9 @@
 package main
 
 import (
+	// "encoding/json"
 	"fmt"
-	"mystack"
+	"golearn/mystack"
 )
 
 type Node struct {
@@ -12,18 +13,18 @@ type Node struct {
 }
 type BiTree Node
 
+//先序遍历
 func PreOrder(root *Node) {
+	// fmt.Printf("root=%+v\n", root)
 	stack := mystack.NewStack()
 	stack.Push(root)
 	for !stack.Empty() {
-		val, err := stack.Pop()
-		fmt.Printf("%+v", val)
-		fmt.Println("duandian", err)
-		if err == nil {
-			node, er := val.(Node)
-			fmt.Printf("%+v", node)
-			fmt.Println(er)
-			fmt.Println("第一次：", node.Data)
+		val, _ := stack.Pop()
+
+		result, ok := val.(interface{})
+		if ok {
+			node, _ := result.(*Node)
+			fmt.Println(node.Data)
 			if node.Right != nil {
 				stack.Push(node.Right)
 			}
@@ -31,6 +32,22 @@ func PreOrder(root *Node) {
 				stack.Push(node.Left)
 			}
 		}
+	}
+}
+func InOrder(root *Node) {
+	stack := mystack.NewStack()
+	for !stack.Empty() || root != nil {
+		for root != nil {
+			stack.Push(root)
+			root = root.Left
+		}
+		val, _ := stack.Pop()
+		interVal, ok := val.(interface{})
+		if ok {
+			node, _ := interVal.(*Node)
+			fmt.Println(node.Data)
+		}
+		root = root.Right
 	}
 }
 
@@ -53,4 +70,5 @@ func main() {
 	c.Left = &e
 	c.Right = &f
 	PreOrder(&a)
+	InOrder(&a)
 }
