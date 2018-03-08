@@ -34,6 +34,8 @@ func PreOrder(root *Node) {
 		}
 	}
 }
+
+//中序遍历
 func InOrder(root *Node) {
 	stack := mystack.NewStack()
 	for !stack.Empty() || root != nil {
@@ -44,11 +46,53 @@ func InOrder(root *Node) {
 		val, _ := stack.Pop()
 		interVal, ok := val.(interface{})
 		if ok {
-			node, _ := interVal.(*Node)
-			fmt.Println(node.Data)
+			interVal, _ := interVal.(*Node)
+			fmt.Println(interVal.Data)
+			root = interVal.Right
+			// fmt.Printf("print node :%+v\n", root)
 		}
-		root = root.Right
 	}
+}
+
+//后序遍历
+func TailOrder(root *Node) {
+	tempStack := mystack.NewStack()
+	outStack := mystack.NewStack()
+	tempStack.Push(root)
+	for !tempStack.Empty() {
+		temp, err := tempStack.Pop()
+		if err == nil {
+			outStack.Push(temp)
+			val, ok := temp.(interface{})
+			if ok {
+				val, ok := val.(*Node)
+				if ok {
+					if val.Left != nil {
+						tempStack.Push(val.Left)
+					}
+					if val.Right != nil {
+						tempStack.Push(val.Right)
+					}
+				}
+
+			}
+		}
+	}
+	for !outStack.Empty() {
+		value, _ := outStack.Pop()
+		fmt.Printf("%+v\n", value)
+	}
+}
+
+//递归求二叉树叶子节点数
+func BtLeaf(root *Node) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left == nil && root.Right == nil {
+		return 1
+	}
+	return BtLeaf(root.Left) + BtLeaf(root.Right)
 }
 
 func main() {
@@ -64,11 +108,19 @@ func main() {
 	e.Data = "e"
 	f := Node{}
 	f.Data = "f"
+	g := Node{}
+	g.Data = "g"
 	a.Left = &b
 	a.Right = &c
 	b.Left = &d
+	b.Right = &g
 	c.Left = &e
 	c.Right = &f
 	PreOrder(&a)
+	fmt.Println("---------------------\n")
 	InOrder(&a)
+	fmt.Println("---------------------\n")
+	TailOrder(&a)
+
+	fmt.Println("叶子节点数为：", BtLeaf(&a))
 }
