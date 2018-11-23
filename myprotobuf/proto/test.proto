@@ -1,0 +1,1252 @@
+syntax = "proto3";
+
+package evaluation;
+
+service EvaluationService {
+	//添加请假记录
+	rpc NewAskForLeave(AskForLeaveReq) returns (NewAskForLeaveResp);
+	//班主任审核请假记录
+	rpc AskForLeaveCheck(AskForLeaveCheckReq) returns (AskForLeaveResp);
+	//消息已读设置
+	rpc AskForLeaveMessage(AskForLeaveMessageReq) returns (AskForLeaveResp);
+	//根据角色获取未查看的记录数 -- roleid: 1、学生  2、老师(班主任)
+	rpc AskForLeaveRecordNum(AskForLeaveRecordReq) returns (AskForLeaveResp);
+	//根据指定角色获取请假记录 -- roleid: 1:学生  2：班主任  3：具有部门(804)查看权限
+	rpc AskForLeaveRecord(AskForLeaveRecordReq) returns (AskForLeaveListResp);
+	//班主任删除请假记录
+	rpc AskForLeaveDeleted(AskForLeaveDelReq) returns (AskForLeaveResp);
+	//根据学号搜索请假记录
+	rpc AskForLeaveSearch(AskForLeaveSearchReq) returns (AskForLeaveListResp);
+	//删除行为数据
+	rpc DelRuleEventByID(RuleEventInfoResp) returns (RuleEventInfoResp);
+
+	//根据用户ID获取用户权限模块IDS
+	rpc GetUserinModuleIDs(UserinModuleReq) returns (UserinModuleResp);
+	//添加或修改事件行为记录
+	rpc NewRuleEvents(RuleEventInfoReq) returns (RuleEventInfoResp);
+	//获取本学校的所有宿舍信息
+	rpc AllDormsInfo(DormAllInfoReq) returns (DormInfoResp);
+    //获取本指定的宿舍信息
+	rpc AppointDormsInfo(DormInfoReq) returns (DormInfoResp);
+	// 获取学校行为
+	rpc EvaluationSchoolRules(EvaluationSchoolRulesReq) returns (EvaluationRulesResp);
+	//获取学校全部行为（只获取第一级）
+	rpc EvaluationAllSchoolRules(EvaluationSchoolRulesReq) returns (EvaluationAllRulesResp);
+	//获取指定行为的学校行为(包含宿舍行为)
+	rpc EvaluationAppointSchoolRules(EvaluationAppointSchoolRulesReq) returns (EvaluationRulesResp);
+	// 获取班级行为
+	rpc EvaluationClassRules(EvaluationClassRulesReq) returns (EvaluationClassRulesResp);
+	//获取行为别名
+    rpc EvaluationAlias(EvaluationAliasReq) returns (EvaluationAliasResp);
+	//获取权限
+    rpc EvaluationOrganizationDataRanges(OrganizationDataRangesReq) returns (OrganizationDataRangesResp);
+
+	// 获取评价项
+	//rpc EvaluationRules(EvaluationRulesReq) returns (EvaluationRulesResp);
+	// 评价
+	rpc Evaluate(EvaluateReq) returns (EvaluateResp);
+	// 编辑评价
+	rpc EditEvaluation(EditEvaluationReq) returns (EditEvaluationResp);
+	// 撤销评价
+	rpc DropEvaluation(DropEvaluationReq) returns (DropEvaluationResp);
+	// 电子班牌查询今日签到
+	rpc GetLeaveCounts(LeaveCountsReq) returns (LeaveCountsResp);
+	// 电子班牌查询时间段内的请假数
+	rpc GetLeaveCountByPeriod(LeaveCountNotypeReq) returns (LeaveCountNotypeResp);
+	// 电子班牌今日表现
+	rpc GetClassRulePerformance(ClassRulePerformanceReq) returns (ClassRulePerformanceResp);
+	// 电子班牌年级美星荣誉称号列表
+	rpc GetChampionitemList(GetChampionitemListReq) returns (GetChampionitemListResp);
+	// 电子班牌年级美星荣誉称号列表
+	rpc GetChampionitemList1(GetChampionitemList1Req) returns (GetChampionitemListResp);	
+	// 电子班牌美星荣誉分数
+	rpc GetClassChampionScore(GetClassChampionScoreReq) returns (GetClassChampionScoreResp);
+	// 电子班牌美星荣誉年级排名表
+	rpc GetClassChampionRankingList(GetClassChampionRankingListReq) returns (GetClassChampionRankingListResp);
+
+	// 小π家长端-在校表现
+	rpc GetStudentPerformanceList(GetStudentPerformanceListReq) returns (GetStudentPerformanceListResp);
+	// 周表现
+	rpc WeekStatistics(WeekStatisticsReq) returns (WeekStatisticsResp);
+	// get user defined class honor name
+	rpc GetUserDefinedClassHonorName(GetUserDefinedClassHonorNameReq) returns (GetUserDefinedClassHonorNameResp);
+	// 获取班级学生表现
+	rpc GetClassStudentPerformanceList(GetClassStudentPerformanceListReq) returns (GetClassStudentPerformanceListResp);
+	// 获取班级视频信息
+	rpc GetClassVideo(GetClassVideoReq) returns (GetClassVideoResp);
+	// 获取公告
+	rpc GetProclamation(ProclamationReq)returns(GetProclamationResp);
+	// 添加公告
+	rpc AddOrUpdateProclamation(Proclamation)returns(ProclamationResp);
+	// 删除公告
+	rpc DeletedProclamation(DeletedProclamationReq) returns(ProclamationResp);
+	//审批多个学生请假
+	rpc AskProveMultipleStudents(ProveMultipleStudentsReq)returns(EvaluateResp);
+	//学校行为申诉
+	rpc SchoolsBehaviorAppeal(SchoolsBehaviorAppealReq)returns(EvaluateResp);
+	// 获取行为记录
+	rpc GetEventRecord(GetEventRecordReq)returns(GetEventRecordResp);
+	// 获取班级行为记录
+    rpc GetClassEventRecord(GetClassEventRecordReq)returns(GetEventRecordResp);
+	// 学校德育管理-统计-按班级条件
+	rpc GetSchoolBehaviorStatistics(SchoolBehaviorStatisticsReq) returns (SchoolBehaviorStatisticsResp);
+	// 学校德育管理-统计-按制度条件
+	rpc GetSchoolBehaviorStatisticsForRule(SchoolBehaviorStatisticsReq) returns (SchoolBehaviorStatisticsForRuleResp);
+    // 学校德育管理-统计-按宿舍条件
+    rpc GetSchoolBehaviorStatisticsForDorm(SchoolBehaviorStatisticsReq) returns (SchoolBehaviorStatisticsForDormResp);
+    // 班级自我管理-统计
+    rpc GetClassBehaviorStatistics(ClassBehaviorStatisticsReq) returns (ClassBehaviorStatisticsResp);
+    // 请假-我添加的
+    rpc GetAskForLeaveByUserId(AskForLeaveByUserAndPageReq) returns (AskForLeaveListResp);
+    // 请假-我审核的
+    rpc GetAskForLeaveHaveBeenApproval(AskForLeaveByUserAndPageReq) returns (AskForLeaveListResp);
+    // 获取当前校区本学期的时段
+    rpc GetCampusSemester(CampusSemesterReq) returns (CampusSemesterResp);
+    // 获取学段信息
+    rpc PeriodInfo(PeriodInfoReq) returns (PeriodInfoResp);
+    // 学校行为评比
+    rpc GetSchoolRanking(GetSchoolRankingReq) returns (GetSchoolRankingResp);
+    // 获取时间范围
+    rpc GetTimeRange(GetTimeRangeReq) returns (GetTimeRangeResp);
+    // 获取按周期的时间分组
+    rpc GetTimeRangeGroupByPeriod(GetTimeRangeGroupByPeriodReq) returns (GetTimeRangeGroupByPeriodResp);
+    // 获取申诉处理行为列表
+    rpc GetAppealEventRecord(GetAppealEventRecordReq) returns (GetAppealEventRecordResp);
+    // 添加或修改请假记录
+    rpc AddOrUpdateAskForLeave(AddOrUpdateAskForLeaveReq) returns (AddOrUpdateAskForLeaveResp);
+    // 添加或修改行为记录
+    rpc AddOrUpdateRuleEvent(AddOrUpdateRuleEventReq) returns (AddOrUpdateRuleEventResp);
+    // 根据角色获取请假记录
+    rpc GetAskForLeaveAllRecord(GetAskForLeaveAllRecordReq) returns (AskForLeaveListResp);
+    // 获取请假详情
+    rpc GetAskForLeaveDetail(GetAskForLeaveDetailReq) returns (AskForLeaveListResp);
+    // 根据部门Id获取部门角色
+    rpc GetDepartmentRole(GetDepartmentRoleReq) returns (GetDepartmentRoleResp);
+    // 根据班级Id查询是否有小组
+    rpc IsHaveClassGroup(IsHaveClassGroupReq) returns (IsHaveClassGroupResp);
+	// 班级行为评比
+	rpc GetClassRanking(GetClassRankingReq) returns (GetClassRankingResp);
+	// 获取德育资源
+	rpc GetMoralResource(GetMoralResourceReq) returns (GetMoralResourceResp);
+}
+
+
+message SchoolsBehaviorAppealReq{
+	int64 id = 1;
+	int64 status = 2;
+	int64 appeal_id = 3;
+	string appeal_by_name = 4;
+}
+
+message ProveMultipleStudentsReq{
+	repeated StudentsStatus students = 1;
+	int64 approve_id = 3;
+	string approve_by = 4;
+	string approve_on = 5;
+}
+
+message StudentsStatus{
+	int64 ask_id = 1;
+	int64 states = 2;
+}
+
+message ProclamationReq{
+	int64 campus_id = 1;
+	int64 class_id = 2;
+	int64 create_by = 3;
+	int64 proclamation_id = 4;
+    int32 start_page = 5;
+    int32 page_size = 6;
+}
+
+message GetProclamationResp{
+	repeated Proclamation proclamations  = 1;
+}
+
+message Proclamation{
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+  int64 target_id = 4;
+  int64 school_id = 5;
+  int64 campus_id = 6;
+  int64 created_by = 7;
+  string created_by_name = 8;
+  string created_on = 9;
+}
+
+message DeletedProclamationReq{
+	int64 id = 1;
+	int64 deleted_by=2;
+	string deleted_on=3;
+}
+
+message ProclamationResp{
+	int64 proclamation_id = 1;
+}
+
+message EvaluationRule1 {
+	int64 rule_id = 1;
+	string rule_name = 2;
+	int32 rule_type=3;
+	int64 class_id=4;
+	repeated EvaluationItem items = 5;
+}
+
+message EvaluationRule {
+	int64 class_id = 1;
+	int64 rule_id = 2;
+	string rule_name = 3;
+	int32 rule_type=4;
+	int64 item_id = 5;
+	int64 parentItem_id = 6;
+	string item_name = 7;
+	float	score = 8;
+	int32   period_id = 9;
+}
+
+message EvaluationAllRule {
+	int64 rule_id = 1;
+	string rule_name = 2;
+	int32 rule_type=3;
+	int32   period_id = 4;
+}
+
+message EvaluationItem {
+	int64 item_id = 1;
+	string item_name = 2;
+	float score = 3;
+	repeated EvaluationItem children = 4;
+}
+message EvaluationSchoolRulesReq {
+	int64 school_id=1;
+	int64 campus_id=2;
+}
+
+message EvaluationAppointSchoolRulesReq {
+	string rule_ids=1;
+}
+
+message EvaluationAliasReq {
+	int64 school_id=1;
+	int64 campus_id=2;
+	string role_ids=3;
+}
+message EvaluationClassRulesReq {
+	repeated int64 class_id = 1;
+	int64 school_id=2;
+	int64 campus_id=3;
+}
+message EvaluationRulesResp {
+	repeated EvaluationRule rules = 1;
+}
+message EvaluationAllRulesResp {
+	repeated EvaluationAllRule rules = 1;
+}
+
+message EvaluationAliasResp {
+	map<int64,string> alias=1;
+}
+
+message EvaluateReq {
+	repeated Student students = 1;
+	string description = 4;
+	string evaluate_on = 5;
+	int64 class_id = 7;
+	int64 created_by = 8;
+	string created_by_name = 9;
+	repeated EvaluateItem items = 10;
+}
+message EvaluateItem {
+	int64 evaluation_item_id = 1;
+	float score = 2;
+	int64 repeat = 3;
+}
+message Student {
+	int64 student_id = 1;
+	string student_name = 2;
+}
+
+message OrganizationDataRanges {
+	int32 role_id = 1;
+	int32 type = 2;
+	int32 range_type = 3;
+	string range_data = 4;
+}
+
+message OrganizationDataRangesResp {
+	repeated OrganizationDataRanges ords = 1;
+}
+
+message OrganizationDataRangesReq {
+	int64 school_id=1;
+	int64 campus_id=2;
+	int32 role_type=3;
+	repeated int64 role_ids = 4;
+}
+
+
+
+message EvaluateResp {
+}
+
+
+message EditEvaluationReq {
+	int64 evaluation_id = 1;
+	int64 evaluation_item_id = 2;
+	int64 repeat = 3;
+	string description = 4;
+	string evaluate_on = 5;
+	float score = 6;
+	int64 edited_by = 7;
+	string edited_by_name = 8;
+}
+message EditEvaluationResp {
+}
+
+
+message DropEvaluationReq {
+	int64 evaluation_id = 1;
+	int64 deleted_by = 2;
+	string deleted_by_name = 3;
+}
+message DropEvaluationResp {
+}
+
+message DormInfo{
+	int64 id = 1;
+	string code = 2;
+	string build_name = 3;
+	int64 dorms_id = 4;
+	string dorms_name = 5;
+	int64 user_id = 6;
+	string user_name = 7;
+	int32 number = 8;
+}
+
+message DormListInfo{
+	repeated DormInfo dorms = 1;
+	repeated int64 user_ids = 2;
+}
+
+message DormAllInfoReq{
+	int64 school_id = 1;
+	int64 campus_id =2;
+}
+
+message DormInfoReq{
+	string dorm_ids = 1;
+}
+
+message DormInfoResp{
+	DormListInfo dorms = 1;
+}
+
+// message AskForLeaveOfOnePersonReq {
+// 	int64 user_id = 1;
+// 	string user_name = 2;
+// 	int64 ask_type = 3;
+// 	string start_leave_on = 4;
+// 	string end_leave_on = 5;
+// 	string description = 6;
+// 	int64 states = 7;
+// 	int64 school_id = 8;
+// 	int64 campus_id = 9;
+// 	int64 class_id = 10;
+// 	string created_name = 11;
+// 	int64 created_by = 12;
+// 	string created_on = 13;
+// 	int64 ask_id=14;
+// 	string sno=15;
+// 	int64 approve_id = 16;
+// 	string approve_by = 17;
+// 	string approve_on = 18;
+// }
+
+message AskForLeaveUser {
+	int64 ask_id = 1;
+	int64 user_id = 2;
+	string user_name = 3;
+	int64 sno = 4;
+	int64 class_id = 5;
+}
+
+message AskForLeaveReq {
+	repeated AskForLeaveUser ask_for_leave_users = 1;
+	int64 ask_type = 2;
+	string start_leave_on = 3;
+	string end_leave_on = 4;
+	string description = 5;
+	int64 states = 6;
+	int64 school_id = 7;
+	int64 campus_id = 8;
+	int64 class_id = 9;
+	string created_name = 10;
+	int64 created_by = 11;
+	string created_on = 12;
+	int64 approve_id = 13;
+	string approve_by = 14;
+	string approve_on = 15;
+}
+
+message AskForLeaveOfOnePersonResp {
+	int64 user_id = 1;
+	int64 ask_id = 2;
+}
+
+message AskForLeaveResp{
+	int64 ask_id = 1;
+}
+
+message NewAskForLeaveResp {
+	repeated AskForLeaveOfOnePersonResp ask_for_leave_resp_info = 1;
+}
+
+message AskForLeaveDelReq{
+	int64 ask_id = 1;
+	int64 deleted_by=2;
+	string deleted_on=3;
+}
+
+message AskForLeaveCheckReq{
+	int64 ask_id = 1;
+	int64 states = 2;
+	int64 approve_id = 3;
+	string approve_by = 4;
+	string approve_on = 5;
+}
+
+message AskForLeaveRecordReq{
+	int64 user_id = 1;
+	int64 role_id = 2;
+	string class_ids = 3;
+	int64 school_id = 4;
+	int64 campus_id =5;
+	int64 student_no = 6;
+}
+
+message GetAskForLeaveAllRecordReq{
+	int64 user_id = 1;
+	int64 role_id = 2;
+	string class_ids = 3;
+	int64 school_id = 4;
+	int64 campus_id =5;
+	string states = 6;
+	int32 start_page = 7;
+	int32 page_size = 8;
+}
+
+message GetAskForLeaveDetailReq {
+	int64 ask_id = 1;
+	int64 student_no = 2;
+	string student_name = 3;
+}
+
+message AskForLeaveSearchReq{
+	string sno = 1;
+}
+
+message AskForLeaveMessage{
+	int64 leave_id = 1;
+	int64 user_id = 2;
+}
+
+message AskForLeaveMessageReq{
+	repeated AskForLeaveMessage asks = 1;
+}
+
+
+message AskForLeaveListResp{
+	repeated AskForLeave ask = 1;
+}
+
+message AskForLeave{
+	int64 ask_id=1;
+	int64 user_id = 2;
+	string user_name = 3;
+	int64 ask_type = 4;
+	string start_leave_on = 5;
+	string end_leave_on = 6;
+	string description = 7;
+	int64 states = 8;
+	int64 class_id = 9;
+	string dorm_build_name=10;
+	string dorm_name=11;
+	string grade_name=13;
+	string class_name=14;
+	string sno=15;
+	string approve_by = 16; // 审批人
+}
+
+message AskForLeaveByUserReq{
+    int64 user_id = 1;
+}
+
+message AskForLeaveByUserAndPageReq{
+    int64 user_id = 1;
+    int64 student_no = 2;
+    string student_name = 3;
+    int32 start_page = 4;
+    int32 page_size = 5;
+}
+
+message RuleEventInfoReq{
+	//事件记录ID
+	int64 event_id=1;
+	//宿舍id
+    int64 dorm_id=2;
+	//班级id
+    int64 class_id=3;
+	//用户id
+    int64 user_id=4;
+	//子制度,只需要最后一级
+	int64 rule_item_id=5;
+	//文字说明 如果是行列选人,将 1行1列 添加在文字说明的最前面
+	string description=6;
+	//记录类型   1 学校行为，宿舍行为 2 班级行为
+	int64 type=7;
+	//发生时间
+	string event_date=8;
+	//分数
+    float score=9;
+	//来源 web端为1  pad端为2
+	int64 source=10;
+	//图片 多张图片以,号分割
+	string image_url=11;
+	//事件录入时间 如果是修改，则为更新时间
+	string created_on=12;
+	//事件录入人ID 如果是修改，则为事件修改人ID
+	int64 created_by=13;
+	//事件录入人姓名 如果是修改，则为事件修改人姓名
+	string created_by_name=14;
+	// 学校id
+	int64 school_id = 15;
+	// 校区id
+	int64 campus_id = 16;
+	string user_name = 17;
+}
+
+message RuleEventInfoResp{
+	int64 event_id = 1;
+}
+
+message UserinModuleReq{
+	int64 user_id = 1;
+}
+
+message UserinModuleResp{
+	map<int64,int64> module_ids=1;
+}
+
+message SchoolAndClassOrganization{
+	repeated string school_org = 1;
+	repeated string school_item_org = 2;
+	bool class_org=3;
+}
+
+message LeaveCount {
+	int32 type = 1;
+	int32 count = 2;
+}
+
+message LeaveCountsReq {
+	int64 class_id = 1;
+	string time_begin_ymd = 2;
+	string time_end_ymd = 3;
+}
+
+message LeaveCountsResp {
+	repeated LeaveCount leave_counts = 1;
+}
+
+message LeaveCountNotypeReq {
+	int64 class_id = 1;
+	string time_begin_ymd = 2;
+	string time_end_ymd = 3;
+}
+
+message LeaveCountNotypeResp {
+	int32 leave_count = 1;
+}
+
+// 班级今日表现
+message ClassRulePerformance {
+	int64 rule_id = 1;
+	string rule_name = 2;
+	float score = 3;
+	int64 class_id = 4;
+}
+
+message ClassRulePerformanceReq {
+	int64 class_id = 1;
+	string timeBeginYMD = 2;
+	string timeEndYMD = 3;
+}
+
+message ClassRulePerformanceResp {
+	repeated ClassRulePerformance class_rule_perform_list = 1;
+}
+
+
+// 美星荣誉称号
+message Championitem {
+	int64 id = 1;
+	string name = 2;
+	string image = 3;
+	string rule_ids = 4;
+	int32 rule_type = 5;
+	int64 cpitem_id = 6;
+	int32 rank_type = 7;
+	int32 min_num = 8;
+	int32 max_num = 9;
+	string hornor_name = 10;
+	int64 school_id = 11;
+	int64 campus_id = 12;
+//	int64 grade_id = 13;
+	string grade_id = 13;
+}
+
+message GetChampionitemListReq {
+	int64 grade_id = 1;
+	int32 title_type = 2;
+}
+
+message GetChampionitemList1Req {
+	int64 campus_id = 1;
+	repeated int64 grade_id_list = 2;
+	int32 title_type = 3;
+}
+
+message GetChampionitemListResp {
+	repeated Championitem championitem_list = 1;
+}
+
+// 班级美星荣誉
+message ClassChampionResult {
+	int64 id = 1;
+	string name = 2;
+	string image = 3;
+	bool light = 4;
+	int64 cpitem_id = 5;
+	int32 min_num = 6;
+	int32 max_num = 7;
+	float score = 8;
+	int32 ranking = 9;
+	string hornor_name = 10;
+	int64 school_id = 11;
+	int64 campus_id = 12;
+	//int64 grade_id = 13;
+	string grade_id = 13;
+	int64 class_id = 14;
+}
+
+message GetClassChampionScoreReq {
+	int64 class_id = 1;
+	int64 champion_id = 2;
+	string time_begin_ymd = 3;
+	string time_end_ymd = 4;
+	int64 campus_id = 5;
+}
+
+message GetClassChampionScoreResp {
+	float score = 1;
+}
+
+message ClassChampionScoreClass {
+	float score = 1;
+	int64 class_id = 2;
+}
+
+message GetClassChampionRankingListReq {
+	string class_id_list = 1;
+	int64 champion_id = 2;
+	string time_begin_ymd = 3;
+	string time_end_ymd = 4;
+	int64 campus_id = 5;
+}
+
+message GetClassChampionRankingListResp {
+	repeated ClassChampionScoreClass score_class_list = 1;
+}
+
+// 学生在校表现
+message StudentPerformance {
+	int64 rule_id = 1;
+	string rule_name = 2;
+	int32 rule_type = 3;
+	int64 user_id = 4;
+	string user_name = 5;
+	int64 rule_item_id = 6;
+	string rule_item_name = 7;
+	float score = 8;
+	string event_date = 9;
+}
+
+message GetStudentPerformanceListReq {
+	int64 user_id = 1;
+	string start_time = 2;
+	string end_time = 3;
+}
+
+message GetStudentPerformanceListResp {
+	repeated StudentPerformance performance_list = 1;
+}
+
+message GetClassStudentPerformanceListReq {
+	int64 class_id = 1;
+	string start_time = 2;
+	string end_time = 3;
+}
+
+message GetClassStudentPerformanceListResp {
+	repeated StudentPerformance performance_list = 1;
+}
+
+message WeekStatisticsReq {
+	int64 class_id = 1;
+	int64 user_id = 2;
+	repeated int64 weeks = 3;
+}
+message WeekStatisticsResp {
+	repeated WeekStatistic statistics = 1;
+}
+message WeekStatistic {
+	message WeekdayDetail {
+		int64 weekday = 1;
+		int64 count = 2;
+	}
+	message Detail {
+		string item = 1;
+		bool reduce_score = 2;
+		repeated WeekdayDetail weekday_details = 3;
+		int64 count = 4;
+	}
+	message User {
+		int64 user_id = 1;
+		float sum = 2;
+		float plus = 3;
+		float minus = 4;
+	}
+	float plus = 1;
+	float minus = 2;
+	float sum = 3;
+	float avg = 4;
+	int64 rank = 5;
+	repeated User changed_users = 6;
+	repeated Detail details = 7;
+	float class_score = 8;
+}
+
+message GetUserDefinedClassHonorNameReq {
+	int64 class_id = 1;
+	string start_time = 2;
+	string end_time = 3;
+}
+
+message GetUserDefinedClassHonorNameResp {
+	string honor_name = 1;
+}
+
+message GetClassVideoReq {
+	int64 class_id = 1;
+}
+
+message GetClassVideoResp {
+	string class_video = 2;
+}
+
+message ClassEvaluationScore {
+    float bonus_point = 1;
+    float total_point = 2;
+    float deduct_point = 3;
+}
+
+message EventRecord {
+    int64 event_id = 1;
+	int64 rule_id = 2;
+	string rule_name = 3;
+	int32 rule_type = 4;
+	int64 user_id = 5;
+	string user_name = 6;
+	int64 rule_item_id = 7;
+	string rule_item_name = 8;
+	float score = 9;
+	string image_url = 10;
+	string event_desc = 11;
+	string event_date = 12;
+	int64 states = 13;
+	int64 class_id = 14;
+	string grade_name = 15;
+	string class_name = 16;
+	string appeal_desc = 17;
+}
+
+message GetEventRecordReq {
+	int64   user_id = 1;
+	int64   event_id = 2;
+	string  state = 3;
+	int64   student_id = 4;
+	string  student_name = 5;
+	int64   rule_id = 6;
+	int64   class_id = 7;
+	string  start_time = 8;
+    string  end_time = 9;
+    int32   start_page = 10;
+    int32   page_size = 11;
+}
+
+message GetClassEventRecordReq {
+	repeated int64 class_ids = 1;
+    int64   event_id = 2;
+    string   state = 3;
+    int64   student_id = 4;
+    string  student_name = 5;
+    int64   rule_id = 6;
+    string  start_time = 7;
+    string  end_time = 8;
+    int32   start_page = 9;
+    int32   page_size = 10;
+}
+
+message GetEventRecordResp {
+	repeated EventRecord event_record = 1;
+}
+
+message RuleBehavior {
+    int64   rule_id = 1;
+    string  rule_name = 2;
+    int32   rule_type = 3;
+    int32   rule_count = 4;
+    repeated ItemBehavior items = 5;
+}
+
+message ItemBehavior {
+    int64   rule_item_id = 1;
+    string  rule_item_name = 2;
+    int32   rule_item_count = 3;
+}
+
+message SchoolBehaviorStatistics {
+    int64   class_id = 1;
+    string  grade_name = 2;
+    string  class_name = 3;
+    int32   class_total = 4;
+    repeated RuleBehavior rules = 5;
+}
+
+message SchoolBehaviorStatisticsReq {
+	repeated int64 class_ids = 1;
+	string start_time = 2;
+	string end_time = 3;
+}
+
+message SchoolBehaviorStatisticsResp {
+	repeated SchoolBehaviorStatistics statistics = 1;
+}
+
+message SchoolBehaviorStatisticsForRule {
+	message RuleItems {
+	    int64   rule_item_id = 1;
+	    string  rule_item_name = 2;
+	    int32   rule_item_count = 3;
+	    repeated Classes classes = 4;
+	}
+
+	message Classes {
+	    int64   class_id = 1;
+	    string  grade_name = 2;
+	    string  class_name = 3;
+	    int32   total = 4;
+    }
+
+    int64   rule_id = 1;
+    string  rule_name = 2;
+    int32   rule_type = 3;
+    repeated RuleItems rule_items = 4;
+}
+
+message SchoolBehaviorStatisticsForRuleResp {
+	repeated SchoolBehaviorStatisticsForRule statistics = 1;
+}
+
+message SchoolBehaviorStatisticsForDorm {
+    message Classes {
+        int64 class_id = 1;
+        string grade_name = 2;
+        string class_name = 3;
+    }
+
+    string dorm_id = 1;
+    string build_name = 2;
+    string dorm_name = 3;
+    int32  dorm_total = 4;
+    repeated Classes classes = 5;
+    repeated RuleBehavior rules = 6;
+}
+
+message SchoolBehaviorStatisticsForDormResp {
+	repeated SchoolBehaviorStatisticsForDorm statistics = 1;
+}
+
+message ClassBehaviorStatistics {
+    int64   class_id = 1;
+    string  grade_name = 2;
+    string  class_name = 3;
+    int32   object_total = 4;
+    string  object_name = 5;
+    repeated RuleBehavior rules = 6;
+}
+
+message ClassBehaviorStatisticsReq {
+	int64 class_id = 1;
+	string condition = 2;
+	string start_time = 3;
+	string end_time = 4;
+}
+
+message ClassBehaviorStatisticsResp {
+	repeated ClassBehaviorStatistics statistics = 1;
+}
+
+message CampusSemester {
+    int32   year = 1;
+    int32   type = 2;
+    string  start_time = 3;
+    string  end_time = 4;
+    string  campus_id = 5;
+}
+
+message CampusSemesterReq {
+    int64 campus_id = 1;
+    string  current_time = 2;
+}
+
+message CampusSemesterResp {
+    CampusSemester semester = 1;
+}
+
+message EvaluationClassRule {
+	int64 class_id = 1;
+	int64 rule_id = 2;
+	string rule_name = 3;
+	int32 rule_type=4;
+	int64 item_id = 5;
+	int64 parentItem_id = 6;
+	string item_name = 7;
+	float	score = 8;
+}
+
+message EvaluationClassAllRule {
+	int64  rule_id = 1;
+	string rule_name = 2;
+	int32  rule_type=3;
+	int64  class_id = 4;
+}
+
+message EvaluationClassRulesResp {
+	repeated EvaluationClassRule class_rules = 1;
+}
+
+message PeriodInfo{
+	int32 period_id = 1;
+	string period_name = 2;
+}
+
+message PeriodInfoReq{
+	int64 campus_id = 1;
+	repeated string rule_ids = 2;
+}
+
+message PeriodInfoResp{
+	repeated PeriodInfo periods = 1;
+}
+
+message GetSchoolRankingReq {
+	string range_type = 1;
+	int32 grade_id = 2;
+	int64 rule_id = 3;
+	string ranking_period = 4;
+	int64 campus_id = 5;
+	int32 period_id = 6;
+	repeated GradeAndClass grade_and_classes = 7;
+	repeated RankingPeriodTimeRange ranking_period_time_ranges = 8;
+}
+
+message Honor {
+	bool is_honor = 1;
+	string honor_name = 2;
+	string sub_honor_name = 3;	
+	string honor_logo = 4;
+	int64 honor_id = 5;
+}
+
+message SchoolRanking {
+	int32 grade_id = 1;
+	string grade_name = 2;
+	int64 class_id = 3;
+	string class_name = 4;
+	string header_teacher_user_name = 5;
+	float score = 6;
+	int32 ranking = 7;
+	bool is_ignore = 8;
+	repeated Honor honors = 9;
+}
+
+message Champion {
+	int64 id = 1;
+	string name = 2;
+}
+
+message PeriodSchoolRanking {
+	string period = 1;
+	string period_name = 2;
+	repeated SchoolRanking school_rankings = 4;
+}
+
+message GetSchoolRankingResp {
+	repeated Champion champions = 3;	
+	repeated PeriodSchoolRanking period_school_rankings = 1;
+}
+
+message GetTimeRangeReq {
+	string range_type = 1;
+	int64 campus_id = 2;
+}
+
+message GetTimeRangeResp {
+	string start_date = 1;
+	string end_date = 2;
+	string semester_start_date = 3;
+	string semester_end_date = 4;
+	string semester_name = 5;
+	string last_semester_start_date = 6;
+	string last_semester_end_date = 7;
+	string last_semester_name = 8;
+}
+
+message GetTimeRangeGroupByPeriodReq {
+	string start_date = 1;
+	string end_date = 2;
+	string ranking_period = 3;
+	string semester_start_date = 4;
+	string semester_end_date = 5;
+	string semester_name = 6;
+	string last_semester_start_date = 7;
+	string last_semester_end_date = 8;
+	string last_semester_name = 9;
+}
+
+message RankingPeriodTimeRange {
+	string period = 1;
+	string period_name = 2;
+	string start_date = 3;
+	string end_date = 4;
+}
+
+message GetTimeRangeGroupByPeriodResp {
+	repeated RankingPeriodTimeRange ranking_period_time_ranges = 1;
+}
+
+message GradeAndClass {
+	int32 grade_id = 1;
+	string grade_name = 2;
+	int64 grade_id1 = 3;
+	int64 class_id = 4;
+	string class_name = 5;
+	int32 header_teacher_user_id = 6;
+}
+
+message ClassInGrade {
+    message Class {
+        int64 class_id = 1;
+        string class_name =2;
+    }
+
+    int64 grade = 1;
+    string grade_name = 2;
+    repeated Class classes = 3;
+}
+
+message AppealEventRecord {
+    int64 appeal_id = 1;
+    int64 event_id = 2;
+	int64 rule_id = 3;
+	string rule_name = 4;
+	int32 rule_type = 5;
+	int64 user_id = 6;
+	string user_name = 7;
+	int64 rule_item_id = 8;
+	string rule_item_name = 9;
+	float score = 10;
+	string event_date = 11;
+	string image_url = 12;
+	int64 states = 13;
+	int64 class_id = 14;
+	string grade_name = 15;
+	string class_name = 16;
+	string event_desc = 17;
+	string appeal_desc = 18;
+	string appeal_date = 19;
+	int64  create_by = 20;
+	string create_name = 21;
+}
+
+message GetAppealEventRecordReq {
+    int64   campus_id = 1;
+    int64   appeal_id = 2;
+    int32   start_page = 3;
+    int32   page_size = 4;
+}
+
+message GetAppealEventRecordResp {
+    repeated AppealEventRecord appeal_event_record = 1;
+}
+
+message AddOrUpdateAskForLeaveUser {
+	int64 user_id = 1;
+	string user_name = 2;
+	string sno = 3;
+	int64 class_id = 4;
+}
+
+message AddOrUpdateAskForLeaveReq {
+	repeated AddOrUpdateAskForLeaveUser ask_for_leave_users = 1;
+    int64 ask_id = 2;
+	int64 ask_type = 3;
+	string start_leave_on = 4;
+	string end_leave_on = 5;
+	string description = 6;
+	int64 states = 7;
+	int64 school_id = 8;
+	int64 campus_id = 9;
+	string created_name = 10;
+	int64 created_by = 11;
+	string created_on = 12;
+	int64 approve_id = 13;
+	string approve_by = 14;
+	string approve_on = 15;
+}
+
+message AddOrUpdateAskForLeaveResp {
+    message AddOrUpdateAskForLeaveUserResp {
+        int64 user_id = 1;
+        int64 ask_id = 2;
+    }
+
+    repeated AddOrUpdateAskForLeaveUserResp ask_resp = 1;
+}
+
+message GetDepartmentRoleReq {
+    int64 organization_id = 1;
+}
+
+message GetDepartmentRoleResp {
+    int32  role_type = 1;
+}
+
+message IsHaveClassGroupReq {
+    repeated int64 class_ids = 1;
+}
+
+message IsHaveClassGroupResp {
+   map<int64,string> class_group=1;
+}
+
+message GetClassRankingReq {
+	string range_type = 1;
+	int64 rule_id = 2;
+	string ranking_period = 3;
+	int64 campus_id = 4;
+	int64 class_id = 5;
+	int32 dimension_type = 6;
+	repeated UserIDAndStudentNo user_id_and_student_no_list = 7;
+	repeated RankingPeriodTimeRange ranking_period_time_ranges = 8;
+}
+
+message UserIDAndStudentNo {
+	int32 user_id = 1;
+	string student_no = 2;
+}
+
+message StudentNoOrGroupIdAndName {
+	string student_no_or_group_id = 1;
+	string name = 2;
+}
+
+message ClassRanking {
+	string student_no_or_group_id = 1;
+	string name = 2;
+	float score = 3;
+	int32 ranking = 4;
+}
+
+message PeriodClassRanking {
+	string period = 1;
+	string period_name = 2;
+	repeated ClassRanking class_rankings = 3;
+}
+
+message GetClassRankingResp {
+	int32 dimension_type = 1;
+	repeated PeriodClassRanking period_class_rankings = 2;
+}
+
+message AddOrUpdateRuleEventUser {
+	int64 user_id = 1;
+	string user_name = 2;
+}
+
+message AddOrUpdateRuleEventReq{
+    repeated AddOrUpdateRuleEventUser users = 1;
+	int64 event_id=2;
+    int64 dorm_id=3;
+    int64 class_id=4;
+	int64 rule_item_id=5;
+	string description=6;
+	int64 type=7;
+	string event_date=8;
+    float score=9;
+	int64 source=10;
+	string image_url=11;
+	string created_on=12;
+	int64 created_by=13;
+	string created_by_name=14;
+	int64 school_id = 15;
+	int64 campus_id = 16;
+}
+
+message AddOrUpdateRuleEventResp {
+    message AddOrUpdateRuleEventUserResp {
+        int64 user_id = 1;
+        int64 event_id = 2;
+    }
+
+    repeated AddOrUpdateRuleEventUserResp event_resp = 1;
+}
+
+message MoralResource {
+    int64 id = 1;
+    string title= 2;
+    string abstract = 3;
+    string content = 4;
+    string files_url = 5;
+    string files_name = 6;
+    int64  type = 7;
+    string created_by = 8;
+    string created_on = 9;
+    string created_name = 10;
+    int64 school_id = 11;
+    int64 campus_id = 12;
+}
+
+message GetMoralResourceReq {
+    int64 role_type = 1;
+    int64 campus_id = 2;
+    int64 resource_id = 3;
+    int32 start_page = 4;
+    int32 page_size = 5;
+}
+
+message GetMoralResourceResp {
+    repeated MoralResource moral_resources = 1;
+}
