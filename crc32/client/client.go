@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"net"
 	"os"
 )
@@ -35,8 +36,9 @@ func main() {
 			fmt.Println("Write:", toWrite, n)
 			msg := make([]byte, 1024)
 			n, err = conn.Read(msg)
+			log.Println("n=", n, "linelen=", linelen, "written=", written)
 			checkError(err)
-			fmt.Println("Response:", string(msg))
+			log.Println("Response:", string(msg))
 		}
 	}
 }

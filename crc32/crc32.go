@@ -20,7 +20,7 @@ func main() { // 在此包中，CRC多项式以反转符号表示，
 	// 应该传递给MakeTable的是0xD5828281。
 	crc32q := crc32.MakeTable(0xD5828281)
 	fmt.Printf("%08x\n", crc32.Checksum([]byte("Hello world"), crc32q))
-	addr, err := net.ResolveUDPAddr("udp", "8081")
+	addr, err := net.ResolveUDPAddr("udp", ":8081")
 	conn, err := net.ListenUDP("udp", addr)
 	if err != nil {
 		log.Println(err)
