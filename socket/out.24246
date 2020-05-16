@@ -1,0 +1,16 @@
+set_robust_list(0x7f931ef229e0, 24)     = 0
+sigaltstack(NULL, {ss_sp=NULL, ss_flags=SS_DISABLE, ss_size=0}) = 0
+sigaltstack({ss_sp=0xc000082000, ss_flags=0, ss_size=32768}, NULL) = 0
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+gettid()                                = 24246
+futex(0xc0000152c8, FUTEX_WAIT_PRIVATE, 0, NULL) = 0
+nanosleep({tv_sec=0, tv_nsec=3000}, NULL) = 0
+futex(0xc000074148, FUTEX_WAKE_PRIVATE, 1) = 1
+futex(0xc0000152c8, FUTEX_WAIT_PRIVATE, 0, NULL) = 0
+epoll_pwait(7, [{EPOLLOUT, {u32=721845816, u64=140270058765880}}], 128, 0, NULL, 0) = 1
+futex(0xc000074148, FUTEX_WAKE_PRIVATE, 1) = 1
+write(1, "connection success\n", 19)    = 19
+mmap(NULL, 262144, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f932b023000
+write(1, "client address:  192.168.80.44:4"..., 37) = 37
+read(6, 0xc0000d4000, 1024)             = -1 EAGAIN (Resource temporarily unavailable)
+futex(0xc0000152c8, FUTEX_WAIT_PRIVATE, 0, NULL
