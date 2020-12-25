@@ -247,4 +247,17 @@ setsockopt(6, SOL_TCP, TCP_KEEPIDLE, [15], 4) = 0
 futex(0xc0000152c8, FUTEX_WAKE_PRIVATE, 1) = 1
 accept4(3, 0xc000050bc8, [112], SOCK_CLOEXEC|SOCK_NONBLOCK) = -1 EAGAIN (Resource temporarily unavailable)
 epoll_pwait(7, [], 128, 0, NULL, 0)     = 0
-epoll_pwait(7, 
+epoll_pwait(7, 0x7ffd14212fa0, 128, -1, NULL, 3) = -1 EINTR (Interrupted system call)
+--- SIGHUP {si_signo=SIGHUP, si_code=SI_USER, si_pid=25170, si_uid=1000} ---
+rt_sigprocmask(SIG_UNBLOCK, [HUP], NULL, 8) = 0
+getpid()                                = 24242
+gettid()                                = 24242
+tgkill(24242, 24242, SIGHUP)            = 0
+--- SIGHUP {si_signo=SIGHUP, si_code=SI_TKILL, si_pid=24242, si_uid=1000} ---
+rt_sigaction(SIGHUP, {sa_handler=SIG_DFL, sa_mask=~[], sa_flags=SA_RESTORER|SA_STACK|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f932ace70c0}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [HUP], NULL, 8) = 0
+getpid()                                = 24242
+gettid()                                = 24242
+tgkill(24242, 24242, SIGHUP)            = 0
+--- SIGHUP {si_signo=SIGHUP, si_code=SI_TKILL, si_pid=24242, si_uid=1000} ---
++++ killed by SIGHUP +++

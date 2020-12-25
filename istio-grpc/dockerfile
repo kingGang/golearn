@@ -1,0 +1,11 @@
+FROM golang:1.14.3 as builder
+RUN go env -w GOPROXY=https://goproxy.cn,direct 
+RUN echo "machine gitee.com login 305965235@qq.com password wxg305965235" > ~/.netrc
+COPY . /go/src/higo-client
+WORKDIR /go/src/higo-client
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -ldflags="-w -s" -o /go/bin/higo-client /go/src/higo-client/main.go
+
+FROM scratch
+WORKDIR /root/
+COPY --from=builder /go/bin/higo-client .
+CMD [ "./higo-client" ]

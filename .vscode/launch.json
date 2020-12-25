@@ -13,9 +13,7 @@
             "host": "127.0.0.1",
             "remotePath": "",
             "program": "${fileDirname}",
-            "env": {
-                "GOPATH":"/Users/wxg/go"
-            },
+            
             "args": [],
             "showLog": true,
             "trace": true
