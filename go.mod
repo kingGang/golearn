@@ -3,6 +3,7 @@ module golearn
 go 1.13
 
 require (
+<<<<<<< HEAD
 	github.com/aws/aws-sdk-go v1.36.15
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/go-redis/redis v6.15.7+incompatible
@@ -24,4 +25,10 @@ require (
 	k8s.io/apimachinery v0.17.0
 	k8s.io/client-go v0.17.0
 	sigs.k8s.io/yaml v1.2.0 // indirect
+=======
+	github.com/golang/protobuf v1.3.3
+	github.com/pkg/errors v0.8.1
+	go.mongodb.org/mongo-driver v1.3.1
+	google.golang.org/grpc v1.27.0
+>>>>>>> 948096c (fix)
 )
