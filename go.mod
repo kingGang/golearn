@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	gitee.com/KaiErDeLe/higo v0.1.3
-	github.com/aws/aws-sdk-go v1.36.15 // indirect
+	github.com/aws/aws-sdk-go v1.36.15
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.7+incompatible
