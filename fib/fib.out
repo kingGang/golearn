@@ -1,0 +1,4 @@
+mode: count
+golearn/fib/fib.go:3.21,4.11 1 140
+golearn/fib/fib.go:8.2,8.28 1 66
+golearn/fib/fib.go:4.11,6.3 1 74
