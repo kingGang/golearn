@@ -78,7 +78,7 @@ func main1() {
 
 func main() {
 	activities := []Activities{
-		{Id: "1", Name: "买2送1", Desc: "", Expression: "Count(A)+C ount(B)+Count(C)>=3"},
+		{Id: "1", Name: "买2送1", Desc: "", Expression: "Count(A)+Count(B)+Count(C)>=2"},
 		{Id: "2", Name: "买3送1", Desc: "", Expression: "Count(B)+Count(C)>=2"},
 		{Id: "3", Name: "纸尿裤买2送1", Desc: "", Expression: "Count(A)+Count(B)>=3"},
 	}
@@ -93,7 +93,7 @@ func main() {
 	cart := &Cart{
 		SkuList: []CartSku{
 			{Id: "1", Name: "a", Num: 100, Amount: 108, GoodID: "A", GroupId: "A", InActivitiesNum: 2},
-			{Id: "2", Name: "b", Num: 200, Amount: 356, GoodID: "B", GroupId: "B", InActivitiesNum: 1},
+			// {Id: "2", Name: "b", Num: 200, Amount: 356, GoodID: "B", GroupId: "B", InActivitiesNum: 1},
 			{Id: "3", Name: "c", Num: 300, Amount: 108, GoodID: "C", GroupId: "C", InActivitiesNum: 1},
 			{Id: "4", Name: "d", Num: 100, Amount: 254, GoodID: "D", GroupId: "D", InActivitiesNum: 1},
 			// {Id: "5", Name: "e", Num: 100, Amount: 254, GoodID: "E", GroupId: "E", InActivitiesNum: 1},
@@ -120,8 +120,8 @@ func main() {
 	}
 	list := list.New()
 	inAcitiveSkus := PromotionSelectSku{}
-	visited := make(map[string]struct{}, 0)
-	GetJionAcitivieEnum2(cart, 0, 1, list, visited, inAcitiveSkus, activities[0])
+	// visited := make(map[string]struct{}, 0)
+	GetJionAcitivieEnum(cart, 0, list, inAcitiveSkus, activities[0])
 	for i := list.Front(); i != nil; i = i.Next() {
 		fmt.Println(i.Value)
 	}
@@ -187,39 +187,33 @@ func (c PromotionSelectSku) CalculateFunc(args ...string) CalValue {
 }
 
 //当前购物车 满足当前活动的几种组合
-func GetJionAcitivieEnum(cart *Cart, index, position int, ans1 *list.List, inAcitiveskus PromotionSelectSku, activies ...Activities) {
-	if len(activies) > 0 {
-		isAdd := true
-		for _, item := range activies {
-			if !item.Calculate(inAcitiveskus.CalculateFunc) {
-				// ans1.PushBack(inAcitiveskus)
-				isAdd = false
-			}
-		}
-		if isAdd {
-			ans1.PushBack(inAcitiveskus)
-		}
+func GetJionAcitivieEnum(cart *Cart, index int, ans1 *list.List, inAcitiveskus PromotionSelectSku, activie Activities) {
 
-	}
-
-	if index >= len(cart.SkuList) {
+	if activie.Calculate(inAcitiveskus.CalculateFunc) {
+		ans1.PushBack(inAcitiveskus)
 		return
 	}
-	var yes, no PromotionSelectSku
-	if cart.SkuList[index].Num > position {
-		position++
-		no = inAcitiveskus
-		yes = inAcitiveskus.Add(cart.SkuList[index])
-		// GetJionAcitivieEnum(cart, index, position, ans1, yes, activies...)
-	} else {
-		no = inAcitiveskus
-		yes = inAcitiveskus.Add(cart.SkuList[index])
-		index++
-		position = 1
 
+	if index == len(cart.SkuList) {
+		return
 	}
-	GetJionAcitivieEnum(cart, index, position, ans1, yes, activies...)
-	GetJionAcitivieEnum(cart, index, position, ans1, no, activies...)
+	// var yes, no PromotionSelectSku
+	// if cart.SkuList[index].Num > position {
+	// 	position++
+	// 	no = inAcitiveskus
+	// 	yes = inAcitiveskus.Add(cart.SkuList[index])
+	// 	// GetJionAcitivieEnum(cart, index, position, ans1, yes, activies...)
+	// } else {
+	// 	no = inAcitiveskus
+	// 	yes = inAcitiveskus.Add(cart.SkuList[index])
+	// 	index++
+	// 	position = 1
+
+	// }
+	no := inAcitiveskus
+	GetJionAcitivieEnum(cart, index+1, ans1, no, activie)
+	yes := inAcitiveskus.Add(cart.SkuList[index])
+	GetJionAcitivieEnum(cart, index+1, ans1, yes, activie)
 }
 
 //当前购物车 满足当前活动的几种组合
@@ -242,22 +236,22 @@ func GetJionAcitivieEnum1(cart *Cart, index, position int, ans1 *list.List, inAc
 //当前购物车 满足当前活动的几种组合
 func GetJionAcitivieEnum2(cart *Cart, index, position int, ans1 *list.List, visited map[string]struct{}, inAcitiveskus PromotionSelectSku, activie Activities) {
 	// 判断当前sku 是否参入活动
-	for index1 := index; index1 < len(cart.SkuList); index1++ {
-		if activie.SkuUseInCurrentAcitivity(&cart.SkuList[index]) {
-			index = index1
-			// fmt.Println(index, cart.SkuList[index].GroupId)
-			break
-		}
-	}
+	// for index1 := index; index1 < len(cart.SkuList); index1++ {
+	// 	if activie.SkuUseInCurrentAcitivity(&cart.SkuList[index]) {
+	// 		index = index1
+	// 		// fmt.Println(index, cart.SkuList[index].GroupId)
+	// 		break
+	// 	}
+	// }
 	// if !activie.SkuUseInCurrentAcitivity(&cart.SkuList[index]) {
 	// 	// GetJionAcitivieEnum2(cart, index+1, position, ans1, visited, inAcitiveskus, activie)
 	// 	// index++
 	// 	return
 	// }
-	if _, ok := visited[inAcitiveskus.GetSelectedSkuId()]; ok {
+	// if _, ok := visited[inAcitiveskus.GetSelectedSkuId()]; ok {
 
-		return
-	}
+	// 	return
+	// }
 
 	if activie.Calculate(inAcitiveskus.CalculateFunc) {
 

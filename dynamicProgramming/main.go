@@ -28,4 +28,7 @@ func main() {
 	fmt.Println("win score=", win1(arr))
 	fmt.Println("win score=", win2(arr))
 	fmt.Println("win score=", win3(arr))
+
+	// ======背包最大值
+	BagMaxValue()
 }
